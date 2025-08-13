@@ -1,0 +1,330 @@
+{%extends 'base.html'%}{%load static%}
+{%block content%}
+
+<main class="main">
+    <div class="page-header breadcrumb-wrap">
+        <div class="container-fluid">
+            <div class="breadcrumb">
+                <a href="{%url 'index'%}">Home</a>
+                <span></span>
+                <a href="{{object.category.get_productscategory_url}}">{{object.category}}</a>
+                <span></span>
+                {{object.product_name}}
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card product-detail accordion-detail mt-5 p-3">
+                    <div class="row mb-4 mt-3">
+                        <div class="col-md-6 col-sm-12 col-xs-12 mb-sm-5">
+                            <!-- single product detail galeery -->
+                            <div class="detail-gallery">
+                                <div class="product-image-slider single-product-slider">
+                                    {% comment %} <figure style="width: 344px;">
+                                        <img src="{{object.image.url}}" width="100%" class="img-fluid" alt="">
+                                    </figure> {% endcomment %}
+                                    {% for img in product_gallery %}
+                                    <figure style="width: 344px;">
+                                        <img src="{{img.image.url}}" width="100%" class="img-fluid" alt="">
+                                    </figure>
+                                    {%endfor%}
+                                </div>
+
+                                <div class="slider-nav-thumbnail">
+                                    {% for img in product_gallery %}
+                                    <div class="slick-slide">
+                                        <img src="{{img.image.url}}" width="100%" class="img-fluid" alt="">
+                                    </div>
+                                    {%endfor%}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-sm-12 col-xs-12">
+                            <form action="{% url 'add_cart' object.id %}" method="POST"> {%csrf_token%}
+
+
+                                <div class="detail-info mt-3 pr-2 pl-2">
+                                    <span class="stock-status out-stock">
+                                        Sale off!
+                                    </span>
+                                    <h2 class="title-detail">{{object.product_name}}</h2>
+                                    <div class="product-detail-rating d-flex justify-content-between">
+                                        <div class="product-rate-cover">
+                                            <div class="product-star-rate d-inline-block">
+                                                <div class="product-stars" style="width: 90%;"></div>
+                                            </div>
+                                            <p font-small ml-3 text-muted mb-0>Average Review :
+                                                <span style="color: #1299a4;">
+                                                    <i
+                                                        class="fas fa-star{% if object.averageReview < 0.5%}-o {%elif object.averageReview >= 0.5 and object.averageReview < 1  %}-half {% endif %}"></i>
+                                                    <i
+                                                        class="fas fa-star{% if object.averageReview < 1.5%}-o {%elif object.averageReview >= 1.5 and object.averageReview < 2  %}-half {% endif %}"></i>
+                                                    <i
+                                                        class="fas fa-star{% if object.averageReview < 2.5%}-o {%elif object.averageReview >= 2.5 and object.averageReview < 3  %}-half {% endif %}"></i>
+                                                    <i
+                                                        class="fas fa-star{% if object.averageReview < 3.5%}-o {%elif object.averageReview >= 3.5 and object.averageReview < 4  %}-half {% endif %}"></i>
+                                                    <i
+                                                        class="fas fa-star{% if object.averageReview < 4.5%}-o {%elif object.averageReview >= 4.5 and object.averageReview < 5  %}-half {% endif %}"></i>
+                                                    <span>{{object.countReview}} reviews</span>
+                                                </span>
+                                            </p>
+                                            <!-- <span class="font-small ml-3 text-muted">(32 reviews)</span> -->
+                                        </div>
+                                    </div>
+                                    <div class="product-price-section">
+                                        <div class="product-price">
+                                            <span class="current-price">GH¢{{object.price}}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="short-desc">
+                                        <p class="font-lg">{{object.description}}</p>
+                                    </div>
+                                    <hr />
+                                    {%if object.variation_set.all%}
+                                    {%if object.variation_set.colors%}
+                                    <div class="row">
+                                        <div class="item-option-select">
+                                            <h6>Choose Color</h6>
+                                            <select name="color" class="form-control" required>
+                                                <option value="" disabled selected>Select a color</option>
+                                                {%for i in object.variation_set.colors %}
+                                                <option value="{{i.variation_value  | lower}}">
+                                                    {{i.variation_value | capfirst}}
+                                                </option>
+                                                {%endfor%}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    {%endif%}
+                                    <!-- row.// -->
+
+                                    <div class="row">
+                                        <div class="item-option-select">
+                                            <h6>Select Size</h6>
+                                            <select name="size" class="form-control" required>
+                                                <option value="" disabled selected>Select a size</option>
+                                                {%for i in object.variation_set.sizes %}
+                                                <option value="{{i.variation_value | lower}}">
+                                                    {{i.variation_value |capfirst}}
+                                                </option>
+                                                {%endfor%}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    {%endif%}
+
+                                    {%if object.stock <= 0 %} <button class="btn btn-outline-danger" disabled>
+                                        <span class="text">Out of Stock</span>
+                                        </button>
+                                        {%else%}
+                                        <button type="submit" class="btn btn-success btn-md">
+                                            <i class="fas fa-shopping-cart"></i>
+                                            <span class="text">Add to cart</span>
+                                        </button>
+                                        {%endif%}
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card additional-info">
+                        <div class="nav-wrapper p-1">
+                            <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text"
+                                role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab"
+                                        data-toggle="tab" href="#tabs-icons-text-1" role="tab"
+                                        aria-controls="tabs-icons-text-1" aria-selected="true">Description</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab"
+                                        href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2"
+                                        aria-selected="false">Additional Info</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab" data-toggle="tab"
+                                        href="#tabs-icons-text-3" role="tab" aria-controls="tabs-icons-text-3"
+                                        aria-selected="false">Vendor</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-4-tab" data-toggle="tab"
+                                        href="#tabs-icons-text-4" role="tab" aria-controls="tabs-icons-text-4"
+                                        aria-selected="false">Review</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel"
+                                    aria-labelledby="tabs-icons-text-1-tab">
+                                    <p class="description">Raw denim you probably haven't heard of them jean
+                                        shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master
+                                        cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica.
+                                        Reprehenderit butcher retro keffiyeh dreamcatcher synth.</p>
+                                    <p class="description">Raw denim you probably haven't heard of them jean
+                                        shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master
+                                        cleanse.</p>
+                                </div>
+                                <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel"
+                                    aria-labelledby="tabs-icons-text-2-tab">
+                                    <p class="description">Cosby sweater eu banh mi, qui irure terry richardson
+                                        ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis
+                                        cardigan american apparel, butcher voluptate nisi qui.</p>
+                                </div>
+
+                                <!-- vendor tab of product -->
+                                <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel"
+                                    aria-labelledby="tabs-icons-text-3-tab">
+                                    <div class="vendro-details d-flex">
+                                        <img src="{{object.vendor.image.url}}" width="150px" class="img-fluid" alt="">
+                                        <div class="vendor-name ml-4">
+                                            <h6><a href="{{object.vendor.get_vendor_url}}">{{object.vendor.vendor_name}}</a></h6>
+                                            <!-- star ratings goes here -->
+                                        </div>
+                                    </div>
+                                    <ul class="contact-info pl-0 mb-5">
+                                        <li>
+                                            <strong>Address: </strong>
+                                            <span>{{object.vendor.address}}</span>
+                                        </li>
+                                        <li>
+                                            <strong>Contact Seller:</strong>
+                                            <span>{{object.vendor.contact}}</span>
+                                        </li>
+                                    </ul>
+                                    <p class="about-vendor">{{object.vendor.description}}
+                                    </p>
+                                </div>
+                                <!-- end of vendor tab -->
+
+
+                                <div class="tab-pane fade" id="tabs-icons-text-4" role="tabpanel"
+                                    aria-labelledby="tabs-icons-text-4-tab">
+                                    <!-- comment form    -->
+                                    <div class="comment-form">
+                                        <h4 class="mb-3">Add a review</h4>
+
+                                        <form action="{%url 'submit_review' object.id %}" method="POST">{%csrf_token%}
+                                            <label>How do you rate this product? </label> <br />
+                                            <div class="rate">
+                                                <input type="radio" name="rating" id="rating10" value="5" required />
+                                                <label for="rating10" title="5"></label>
+                                                <input type="radio" name="rating" id="rating9" value="4.5" required />
+                                                <label for="rating9" title="4.5" class="half"></label>
+                                                <input type="radio" name="rating" id="rating8" value="4" required />
+                                                <label for="rating8" title="4"></label>
+                                                <input type="radio" name="rating" id="rating7" value="3.5" required />
+                                                <label for="rating7" title="3.5" class="half"></label>
+                                                <input type="radio" name="rating" id="rating6" value="3" required />
+                                                <label for="rating6" title="3"></label>
+                                                <input type="radio" name="rating" id="rating5" value="2.5" required />
+                                                <label for="rating5" title="2.5" class="half"></label>
+                                                <input type="radio" name="rating" id="rating4" value="2" required />
+                                                <label for="rating4" title="2"></label>
+                                                <input type="radio" name="rating" id="rating3" value="1.5" required />
+                                                <label for="rating3" title="1.5" class="half"></label>
+                                                <input type="radio" name="rating" id="rating2" value="1" required />
+                                                <label for="rating2" title="1"></label>
+                                                <input type="radio" name="rating" id="rating1" value="0.5" required />
+                                                <label for="rating1" title="0.5" class="half"></label>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" id="exampleFormControlInput1"
+                                                    placeholder="review title" name="subject">
+                                            </div>
+                                            <div class="form-group">
+                                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                                                    placeholder="Write a large text here ..." name="review"></textarea>
+                                            </div>
+
+                                            {%if user.is_authenticated %}
+                                            {%if orderedproduct %}
+                                            <button type="submit" class="btn btn-success btn-sm">Submit Review</button>
+                                            {%else%}
+                                            <p>You must purchase this product before you can post review </p>
+                                            {%endif%}
+                                            {%else%}
+                                            <p>You must be logged in to post a review <span>
+                                                    <a href="{% url 'login' %}">Login</a> </span> </p>
+                                            {%endif%}
+
+                                            {%include 'snippets/alerts.html'%}
+                                        </form>
+                                    </div>
+                                    <!-- end of review form -->
+
+                                    <div class="comments-area mt-5 border-top">
+                                        <h4 class="mb-4">Customer Review</h4>
+                                        <p>Product Review :
+                                            <span style="color: #1299a4;">
+                                                <i
+                                                    class="fas fa-star{% if object.averageReview < 0.5%}-o {%elif object.averageReview >= 0.5 and object.averageReview < 1  %}-half {% endif %}"></i>
+                                                <i
+                                                    class="fas fa-star{% if object.averageReview < 1.5%}-o {%elif object.averageReview >= 1.5 and object.averageReview < 2  %}-half {% endif %}"></i>
+                                                <i
+                                                    class="fas fa-star{% if object.averageReview < 2.5%}-o {%elif object.averageReview >= 2.5 and object.averageReview < 3  %}-half {% endif %}"></i>
+                                                <i
+                                                    class="fas fa-star{% if object.averageReview < 3.5%}-o {%elif object.averageReview >= 3.5 and object.averageReview < 4  %}-half {% endif %}"></i>
+                                                <i
+                                                    class="fas fa-star{% if object.averageReview < 4.5%}-o {%elif object.averageReview >= 4.5 and object.averageReview < 5  %}-half {% endif %}"></i>
+                                                <span>{{object.countReview}} reviews</span>
+                                            </span>
+                                        </p>
+
+                                        <div class="row">
+                                            {%for review in reviews %}
+                                            <div class="col-lg-10">
+                                                <div class="comment-list">
+                                                    <div
+                                                        class="card single-comment justify-content-center d-flex mb-5">
+                                                        <div class="user justify-content-between d-flex">
+                                                            <h6 class="mr-4">{{review.user.username}}</h6>
+                                                            <div class="descr">
+                                                                <div class="d-flex justify-content-between mb-4">
+                                                                    <div class="dflex align-items-center">
+                                                                        <span class="font-xs text-muted">{{review.updated_at}}</span>
+                                                                    </div>
+                                                                    <div class="product-rate">
+                                                                        <div class="product-rating">
+                                                                            <span style="color: #1299a4;">
+                                                                                <i
+                                                                                  class="fas fa-star{% if review.rating == 0.5%}-half {%elif review.rating < 1 %}-o {% endif %}"></i>
+                                                                                <i
+                                                                                  class="fas fa-star{% if review.rating == 1.5%}-half {%elif review.rating < 2 %}-o {% endif %}"></i>
+                                                                                <i
+                                                                                  class="fas fa-star{% if review.rating == 2.5%}-half {%elif review.rating < 3 %}-o {% endif %}"></i>
+                                                                                <i
+                                                                                  class="fas fa-star{% if review.rating == 3.5%}-half {%elif review.rating < 4 %}-o {% endif %}"></i>
+                                                                                <i
+                                                                                  class="fas fa-star{% if review.rating == 4.5%}-half {%elif review.rating < 5 %}-o {% endif %}"></i>
+                                                                              </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <p>{{review.review}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {%endfor%}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{%endblock%}

@@ -1,0 +1,172 @@
+{%extends 'base.html'%}{%load static%}
+{%block content%}
+<section class="header-menu home-slider mb-5">
+    <!-- Banner and carouse l section -->
+    <div class="container-fluid ">
+        <div class="row align-items-center">
+            <div class="col-xl-8 col-lg-12">
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                    </ol>
+                    <div class="carousel-inner">
+                        <div class="carousel-item">
+                            <img src="{%static 'img/banner1.jpg'%}"
+                                class="d-block w-100 rounded  animate__animated animate__fadeInTopLeft" alt="...">
+
+                            <div class="carousel_ads_content  ">
+                                <p class="exclusive-text animate__animated animate__slideInDown">Exclusive offer
+                                    <span class="badge bg-success">-20% OFF</span>
+                                </p>
+                                <h3 class="exclusive-title animate__animated animate__fadeInRight">Having the best
+                                    quality products</h3>
+                                <p class="exclusive-timeline animate__animated animate__lightSpeedInRight">Only this
+                                    week. Dont miss ....</p>
+                                <a href=""
+                                    class="btn btn-sm carouselshopnowbtn animate__animated animate__rollIn">Shop
+                                    now</a>
+                            </div>
+                        </div>
+
+                        <!-- second items -->
+                        <div class="carousel-item active">
+                            <img src="{%static 'img/banner2.jpg'%}"
+                                class="d-block w-100 rounded animate__animated animate__flipInX " alt="...">
+
+                            <div class="carousel_ads_content">
+                                <p class="exclusive-text animate__animated animate__slideInDown">Exclusive offer
+                                    <span class="badge bg-success">-20% OFF</span>
+                                </p>
+                                <h3 class="exclusive-title animate__animated animate__fadeInRight">A different Kind
+                                    of
+                                    Seller</h3>
+                                <p class="exclusive-timeline animate__animated animate__lightSpeedInRight">Only this
+                                    week. Dont miss ....</p>
+                                <a href=""
+                                    class="btn btn-sm  carouselshopnowbtn animate__animated animate__rollIn">Shop
+                                    now</a>
+                            </div>
+
+                        </div>
+
+                        <!-- thrid item -->
+                        <div class="carousel-item">
+                            <img src="{%static 'img/banner3.jpg'%}"
+                                class="d-block w-100 rounded animate__animated animate__rotateInDownRight"
+                                alt="...">
+
+                            <div class="carousel_ads_content">
+                                <p class="exclusive-text animate__animated animate__slideInDown">Exclusive offer
+                                    <span class="badge bg-success">-20% OFF</span>
+                                </p>
+                                <h3 class="exclusive-title animate__animated animate__fadeInRight">Quality Freshness
+                                    Guaranteed!</h3>
+                                <p class="exclusive-timeline animate__animated animate__lightSpeedInRight">Only this
+                                    week. Dont miss ....</p>
+                                <a href=""
+                                    class="btn btn-sm carouselshopnowbtn animate__animated animate__rollIn">Shop
+                                    now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 d-none d-xl-block">
+                {% comment %} style="background:url(static/img/banner-11.png) no-repeat center bottom;background-size:cover;" {% endcomment %}
+                <div class="banner-img style-3">
+                    <div class="banner-text">
+                        <h2>Deliever to your Home</h2>
+                        <a href="" class="btn btn-success">Shop Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End of Banner and carousel Section -->
+</section>
+
+<section class="banners mb-5">
+    <div class="container-fluid">
+        <div class="row">
+            {% for ads in main_ads %}
+            <div class="col-lg-4 col-md-6">
+                <div class="banner-img">
+                    <img src="{{ads.img.url}}" width="100%" alt="">
+                    <div class="banner-text">
+                        <h4> {{ads.title}}</h4>
+                        <a href="" class="btn btn-success">shop now</a>
+                    </div>
+                </div>
+            </div>
+            {%endfor%}
+        </div>
+    </div>
+</section>
+
+<section class="features-products my-5">
+    <div class="container-fluid">
+        <div class="section-title">
+            <h3>Featured Products</h3>
+        </div>
+        <div class="row">
+            {%for product in featured_products%}
+            <div class="col-lg-3 col-sm-6 col-6">
+                <div class="product-cart-wrap mb-4">
+                    <div class="product-img-action-wrap">
+                        <div class="product-img product-img-zoom">
+                            <a href="{{product.get_product_url}}">
+                                <img src="{{product.image.url}}" class="img-responsive" width='250px' alt="">
+                                <!-- <img src="{%static ''%}img/3.jpg" class="img-responsive" alt=""> -->
+                            </a>
+                        </div>
+                    </div>
+                    <div class="product-content-wrap">
+                        <div class="product-category"><a href="">{{product.category}}</a></div>
+                        <h2><a href="{{product.get_product_url}}">{{product.product_name}}</a></h2>
+                        <div class="product-rate-cover">
+                            <div class="product-rate d-inline-block">Rating stars</div>
+                        </div>
+                        <div><span class="font-small text-muted">By <a href="{{product.vendor.get_vendor_url}}">{{product.vendor}}</a></span> </div>
+                        <div class="product-card-bottom">
+                            <div class="product-price">
+                                <span>GH¢{{product.price}}</span>
+                                <!-- <span class="old-price">GH¢14.20</span> -->
+                            </div>
+                            <div class="add-cart">
+                                <a href="{% url 'add_cart' product.id %}" class="add"> <i class="fas fa-shopping-cart"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {%endfor%}
+        </div>
+    </div>
+</section>
+
+<section class="popular-categories">
+    <div class="container-fluid">
+        <div class="section-title">
+            <div class="title">
+                <h3>Shop by Categories</h3>
+            </div>
+        </div>
+        <div class="owl-carousel pt-3">
+            {%for cat in various_category%}
+            <div class="item">
+                <div class="card-1">
+                    <figure>
+                        <a href="{{cat.get_productscategory_url}}">
+                            <img src="{{cat.image.url}}" height="80px" class="img-responsive" alt=""></a>
+                    </figure>
+                    <h6><a href="{{cat.get_productscategory_url}}">{{cat.category_name}}</a></h6>
+                </div>
+            </div>
+            {%endfor%}            
+        </div>
+    </div>
+</section>
+
+{%endblock%}

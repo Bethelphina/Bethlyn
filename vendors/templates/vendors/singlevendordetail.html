@@ -1,0 +1,203 @@
+{%extends 'base.html'%}{%load static %}
+{%block content%}
+<main class="main">
+    <div class="page-header breadcrumb-wrap">
+        <div class="container-fluid">
+            <div class="breadcrumb">
+                <a href="{%url 'vendorslist'%}">Home</a>
+                <span></span>
+                Vendors
+                <span></span>
+                {{singlevendor.vendor_name}}
+            </div>
+        </div>
+    </div>
+    <div class="container d-flex justify-content-center flex-column text-center mt-3">
+        <div class="vendor-header mt-4 mb-3" style="background-image: url({%static '/img/vendor-header-bg.png'%});">
+            <div class="vendor-header-inner d-lg-flex d-sm-block">
+                <div class="vendor-logo">
+                    <img src="./assets/img/logo.png" alt="" style="max-width: 150px;">
+                </div>
+                <div class="vendor-content" style="text-align: left;">
+                    <div class="product-category">
+                        <span class="text-brand">Since {{singlevendor.joined|date:"Y"}}</span>
+                    </div>
+                    <h3 class="text-white mb-3">
+                        <span class="text-white">{{singlevendor.vendor_name}}</span>
+                        <a href="" class="btn btn-outline-danger btn-sm d-inline">Dashboard</a>
+                    </h3>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="vendor-des mb-3">
+                                <p class="text-white">Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                    Alias, facilis. Aliquid labore dolore in?</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="vendor-info text-white mb-4">
+                                <ul style="list-style: none;padding: 0px;">
+                                    <li>
+                                        <strong>Address:</strong>
+                                        <span>{{singlevendor.address}}</span>
+                                    </li>
+                                    <li>
+                                        <strong>Call Us:</strong>
+                                        <span>+{{singlevendor.contact}}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="follow-social">
+                                <h6 class="text-white">Follow Us</h6>
+                                <ul class="social-network" style="list-style: none;padding-left: 0px;">
+                                    <li class="hover-up"><a href="">
+                                            <img src="{%static 'img/icons/social-tw.svg'%}"
+                                                alt="">
+                                        </a></li>
+                                    <li class="hover-up"><a href="">
+                                            <img src="{%static 'img/icons/social-fb.svg'%}"
+                                                alt="">
+                                        </a></li>
+                                    <li class="hover-up"><a href="">
+                                            <img src="{%static 'img/icons/social-insta.svg'%}"
+                                                alt="">
+                                        </a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+       
+    </div>
+    <hr>
+    <div class="container-fluid">
+        <div class="row flex-row-reverse">
+            <div class="col-lg-9">
+                <p>We found {{singlevendor.product_set.all.count}} products</p>
+                <div class="row">
+                    {%for product in singlevendor.product_set.all%}
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                        <div class="product-cart-wrap mb-4">
+                            <div class="product-img-action-wrap">
+                                <div class="product-img product-img-zoom">
+                                    <a href="{{product.get_product_url}}">
+                                        <img src="{{product.image.url}}" class="img-responsive" width='100%' alt="">
+                                        <!-- <img src="./assets/img/3.jpg" class="img-responsive" alt=""> -->
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="product-content-wrap">
+                                <div class="product-category"><a
+                                        href="{{product.category.get_productscategory_url}}">{{product.category}}</a>
+                                </div>
+                                <h2><a href="{{product.get_product_url}}">{{product.product_name}}</a></h2>
+                                <div class="product-rate-cover">
+                                    <div class="product-rate d-inline-block">Rating stars</div>
+                                </div>
+                                <div><span class="font-small text-muted">By <a
+                                            href="{{vendor.get_vendor_url}}">{{product.vendor}}</a></span>
+                                </div>
+                                <div class="product-card-bottom">
+                                    <div class="product-price">
+                                        <span>GH¢{{product.price}}</span>
+                                        <span class="old-price">GH¢14.20</span>
+                                    </div>
+                                    <div class="add-cart">
+                                        <a href="{% url 'add_cart' product.id %}" class="add"> <i
+                                                class="fas fa-shopping-cart"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {%endfor%}
+                </div>
+                <!-- pagination -->
+                <nav aria-label="...">
+                    {% if products.has_other_pages %}
+                    <ul class="pagination">
+                        {%if products.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{products.previous_page_number}}">
+                                <i class="fa fa-angle-left"></i>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                        {%else%}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#">
+                                <i class="fa fa-angle-left"></i>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                        {%endif%}
+
+                        {% for i in products.paginator.page_range %}
+                        {%if products.number == i %}
+                        <li class="page-item active">
+                            <a class="page-link" href="#">{{i}} <span class="sr-only">(current)</span></a>
+                        </li>
+                        {%else%}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{i}}">{{i}}</a>
+                        </li>
+                        {%endif%}
+                        {%endfor%}
+
+                        {%if products.has_next%}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{products.next_page_number}}">
+                                <i class="fa fa-angle-right"></i>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                        {%else%}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#">
+                                <i class="fa fa-angle-right"></i>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                        {%endif%}
+                    </ul>
+                    {%endif%}
+                </nav>
+            </div>
+            <div class="col-lg-3">
+                <div class="row">
+                    <div class="col-12 mb-4">
+                        <div class="ads-banner-img">
+                            {% comment %} <img src="{%static 'img/banner-1.png'%}" class="img-fluid rounded" alt=""> {% endcomment %}
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="sidebar-widget widget-category">
+                            <h5>Category</h5>
+                            <ul class="p-0">
+                                <li>
+                                    <a href="{%url 'store'%}">
+                                        <img src="{%static '/img/category-1.svg'%}" alt="">All Products</a>
+                                    <!-- <span class="count">4</span> -->
+                                </li>
+                                {% for category in links%}
+                                <li>
+                                    <a href="{{category.get_productscategory_url}}">
+                                        <img src="{{category.image.url}}" width="40px" alt="">{{category.category_name}}</a>
+                                    <!-- <span class="count">4</span> -->
+                                </li>
+                                {%endfor%}
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+{%endblock%}

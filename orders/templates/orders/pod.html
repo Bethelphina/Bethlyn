@@ -1,0 +1,13 @@
+{% autoescape off%}
+
+Hi {{user.first_name}},
+YOUR ORDER HAS BEEN RECEIVED, please prepare an amount of {{order.order_total}} to be paid.
+Your Item will be delivered soon.
+
+
+
+Order Info:
+Order number: {{order.order_number}}
+Payment id : {{payment.ref}}
+
+{%endautoescape%}

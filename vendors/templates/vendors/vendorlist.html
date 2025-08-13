@@ -1,0 +1,79 @@
+{%extends 'base.html'%}
+{%block content%}
+
+<main class="main">
+    <div class="page-header breadcrumb-wrap">
+        <div class="container-fluid">
+            <div class="breadcrumb">
+                <a href="{%url 'index'%}">Home</a>
+                <span></span>
+                Vendor List
+            </div>
+        </div>
+    </div>
+    <div class="container d-flex justify-content-center flex-column text-center mt-3">
+        <h1 class="display-2 mb-3">Our Vendor List</h1>
+        <p>We have <strong class='text-brand'>{{object_list.count}}</strong> vendors now</p>
+        {% comment %} <form class="my-3">
+            <div class="form-group">
+                <div class="input-group  mb-4">
+                    <input class="form-control" placeholder="Search" type="text">
+                    <button class="btn btn-success btn-fab btn-icon btn-round">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form> {% endcomment %}
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            {%for vendor in object_list%}
+            <div class="col-lg-6 col-md-6 col-12">
+                <div class="vendor-wrap d-flex flex-wrap">
+                    <div class="product-badge"><span class="hot">Mall</span></div>
+                    <div class="vendor-info p-4">
+                        <div class="vender-img">
+                            <a href="{{vendor.get_vendor_url}}"><img src="{{vendor.image.url}}" class="img-fluid" width="150px" alt="{{vendor.vendor_name}}_image"></a>
+                        </div>
+                        <div class="mt-3">
+                            <span class="vendor-total-product ">
+                                {%if vendor.product_set.all.count > 1%} 
+                                {{vendor.product_set.all.count}} products
+                                {%else%}
+                                {{vendor.product_set.all.count}} product
+                                {%endif%}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="vendor-content-detail">
+                        <div class="mb-5">
+                            <p class="text-muted m-0">Since {{vendor.joined|date:"Y"}}</p>
+                            <h4 class="mb-3"><a href="{{vendor.get_vendor_url}}">{{vendor.vendor_name}}</a></h4>
+                            <div class="d-flex justify-content-between align-items-end">
+                                <ul class="vendor-contact-1 contact-info text-muted p-0">
+                                    <li>
+                                        <i class="fas fa-map-marker pr-2"></i>
+                                        <strong>Address:</strong>
+                                        <span>{{vendor.address}}</span>
+                                    </li>
+                                    <li class="mt-2">
+                                        <i class="fas fa-phone pr-2"></i>
+                                        <strong>Call Us:</strong>
+                                        <span>{{vendor.contact}}</span>
+                                    </li>
+                                </ul>
+                                <a href="{{vendor.get_vendor_url}}" class="visit-store btn btn-sm btn-outline-info">Visit Store
+                                    <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {%endfor%}
+           
+        </div>
+    </div>
+</main>
+
+{%endblock%}
