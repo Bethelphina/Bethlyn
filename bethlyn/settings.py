@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-import os 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -60,7 +59,6 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -68,9 +66,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-
-WHITENOISE_MANIFEST_STRICT = False
 
 ROOT_URLCONF = 'bethlyn.urls'
 
@@ -140,22 +135,18 @@ USE_I18N = True
 USE_TZ = True
 
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = '/static/'
-
-# This is the directory where Django will collect all static files for deployment.
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') 
-
-# This lists directories where Django should look for static files during development.
+STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR/'static'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
+    'bethlyn/static',
 ]
 
-# When using WhiteNoise for serving static files in production (common with Render)
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR/'media'
 
 
 # Default primary key field type
